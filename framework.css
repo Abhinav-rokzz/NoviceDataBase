@@ -1,0 +1,561 @@
+/* -----------------------------------------------------------
+   NoviceHall — tiny utility-first CSS framework (clean & lovely)
+   Organized: tokens → reset → typography → layout → utilities
+   ----------------------------------------------------------- */
+
+:root{
+  /* Palette */
+  --color-primary: #153e75; /* deep indigo */
+  --color-accent: #06b6d4;  /* teal */
+  --color-warm: #f6b73c;    /* warm gold */
+  --color-primary-contrast: #ffffff;
+  --color-surface: #ffffff;
+  --color-foreground: #0b1220;
+  --color-muted-foreground: #5b6774;
+
+  /* Page background */
+  --background-image-light: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+  --background-image-dark: linear-gradient(135deg, #05060a 0%, #071021 100%);
+  /* Unified gradient variables (light defaults) */
+  --page-bg-top: #fdfcfb;
+  --page-bg-bottom: #e2d1c3;
+  --page-gradient: linear-gradient(180deg,var(--page-bg-top),var(--page-bg-bottom));
+
+  /* Surface overlays (light defaults) */
+  --surface-overlay: rgba(255,255,255,0.06);
+  --surface-overlay-strong: rgba(255,255,255,0.95);
+
+  /* Muted text */
+  --color-muted: #6b7280;
+
+  /* Avatar background (light) */
+  --avatar-bg: linear-gradient(135deg,#e9eefb,#f3f6ff);
+  
+
+  /* Link hover (light & dark) */
+  --link-hover: rgba(13,110,253,0.08);
+  --link-hover-dark: rgba(6,182,212,0.12);
+
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 6px;
+  --space-2: 12px;
+  --space-3: 20px;
+  --space-4: 32px;
+  --space-5: 48px;
+
+  /* Header */
+  --header-height: 48px;
+
+  /* Rounding & type */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(21,62,117,0.08);
+  --shadow-md: 0 8px 24px rgba(21,62,117,0.12);
+  --shadow-lg: 0 16px 48px rgba(21,62,117,0.16);
+  --shadow-xl: 0 24px 64px rgba(21,62,117,0.20);
+
+  /* Type size */
+  --text-base: 16px;
+}
+
+/* Dark theme overrides (uses [data-theme="dark"]) */
+[data-theme="dark"]{
+  --color-primary: #60a5fa;
+  --color-muted: #9ca3af;
+  --color-bg: #0b1220;
+  --color-surface: #0f1724;
+  --color-foreground: #e6eef8;
+  --color-muted-foreground: #9ca3af;
+
+  /* Page background for dark theme */
+  --page-bg-top: #05060a;
+  --page-bg-bottom: #071021;
+
+  /* Header & components */
+  --header-bg: rgba(15,23,36,0.75);
+  --input-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+
+  /* surface overlay tweaks for dark */
+  --surface-overlay: rgba(15,23,36,0.46);
+  --surface-overlay-strong: rgba(10,12,16,0.92);
+
+  /* Footer in dark theme: darker surface with light text for readability */
+  --footer-bg: rgba(10,12,16,0.95);
+  --footer-text: #e6eef8;
+
+  /* link hover tweak for dark */
+  --link-hover-dark: rgba(88, 119, 158, 0.12);
+
+  /* Avatar background (dark) */
+  --avatar-bg: linear-gradient(135deg,#0b1220,#071021);
+}
+
+/* Component tweaks for dark theme to ensure contrast and readability */
+[data-theme="dark"] header{background:var(--surface-overlay)}
+[data-theme="dark"] .card{background:var(--surface-overlay);border:1px solid rgba(255,255,255,0.03)}
+[data-theme="dark"] .feature{background:var(--surface-overlay);border:1px solid rgba(255,255,255,0.03)}
+[data-theme="dark"] .about-illustration{background:var(--surface-overlay);background-image:none;color:var(--color-muted-foreground);border:1px solid rgba(255,255,255,0.03)}
+
+/* Ensure About area uses the dark surface in alternate dark-mode approaches and system preference */
+[data-theme="dark"] #about .about-illustration,
+.dark #about .about-illustration,
+.theme-dark #about .about-illustration{background:var(--surface-overlay)!important;background-image:none!important;color:var(--color-muted-foreground);border:1px solid rgba(255,255,255,0.03)!important}
+
+@media (prefers-color-scheme: dark){
+  #about .about-illustration{background:var(--surface-overlay);background-image:none;color:var(--color-muted-foreground);border:1px solid rgba(255,255,255,0.03)}
+}
+[data-theme="dark"] .message-panel{background:rgba(10,12,16,0.92);color:var(--color-foreground)}
+[data-theme="dark"] footer{background:var(--footer-bg);color:var(--footer-text);border-top-color:rgba(255,255,255,0.03)}
+[data-theme="dark"] footer a{color:var(--footer-text)} 
+
+/* Dark-mode component tweaks (contrast & readability) */
+[data-theme="dark"] .btn-ghost{border:1px solid rgba(255,255,255,0.06);color:var(--color-foreground);background:transparent}
+[data-theme="dark"] .chip{background:var(--link-hover-dark)}
+[data-theme="dark"] .avatar{background:var(--avatar-bg)}
+[data-theme="dark"] .lead{color:var(--color-muted)}
+[data-theme="dark"] p{color:var(--color-muted-foreground)}
+[data-theme="dark"] .btn-primary{box-shadow:0 12px 40px rgba(9,24,36,0.12)}
+[data-theme="dark"] .nh-toggle{border:1px solid rgba(255,255,255,0.03)}
+
+[data-theme="dark"] nav[aria-label="Primary navigation"] a{color:var(--color-foreground)}
+[data-theme="dark"] .input{background:var(--input-bg);border:1px solid rgba(255,255,255,0.06);box-shadow:inset 0 2px 6px rgba(255,255,255,0.02)}
+[data-theme="dark"] .btn-ghost{border-color:rgba(255,255,255,0.06)}
+
+/* Make surfaces transparent in dark mode so the page gradient is uniform */
+[data-theme="dark"] body{background:linear-gradient(180deg,var(--page-bg-top),var(--page-bg-bottom));background-attachment:fixed}
+
+/* Remove decorative radial overlays in dark mode so the backdrop stays uniform */
+[data-theme="dark"] body::before{background-image:none!important;opacity:0!important}
+.dark body::before, .theme-dark body::before{background-image:none!important;opacity:0!important}
+@media (prefers-color-scheme: dark){
+  body::before{background-image:none!important;opacity:0!important}
+}
+
+[data-theme="dark"] header,
+[data-theme="dark"] .card,
+[data-theme="dark"] .feature,
+[data-theme="dark"] .about-illustration,
+[data-theme="dark"] #about,
+[data-theme="dark"] .about-grid,
+[data-theme="dark"] .about-features,
+[data-theme="dark"] footer{background:transparent !important;background-image:none !important;border-color:rgba(255,255,255,0.04) !important}
+
+/* Keep message panel slightly solid for readability but tuned to dark theme */
+[data-theme="dark"] .message-panel{background:rgba(10,12,16,0.85);box-shadow:0 18px 40px rgba(0,0,0,0.6)}
+[data-theme="dark"] .message-toggle-button{background:transparent;border-color:rgba(255,255,255,0.03)}
+
+/* -----------------------------
+   Base / Reset
+   ----------------------------- */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:var(--font-sans);
+  /* Page background: fixed so the same backdrop persists while scrolling */
+  background:linear-gradient(180deg,var(--page-bg-top),var(--page-bg-bottom));
+  background-attachment:fixed;
+  background-position:center center;
+  background-repeat:no-repeat;
+  background-size:cover;
+  color:var(--color-foreground);
+  font-size:var(--text-base);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased; /* Safari, Chrome (macOS) */
+  -moz-osx-font-smoothing:grayscale;  /* macOS Firefox */
+  font-smooth:always;                 /* non-standard, some browsers */
+  text-rendering:optimizeLegibility;
+  -webkit-font-feature-settings: "kern" 1;
+  font-feature-settings: "kern" 1;
+}
+/* Subtle decorative radial overlays for premium depth (non-intrusive)
+   pointer-events:none ensures no interference with UX */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:radial-gradient(circle at 10% 10%, rgba(6,182,212,0.03), transparent 6%), radial-gradient(circle at 90% 90%, rgba(246,183,60,0.02), transparent 8%)}
+img,video{max-width:100%;height:auto;border-radius:8px;box-shadow:var(--shadow-sm);} 
+
+/* Accessibility helper */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* -----------------------------
+   Typography
+   ----------------------------- */
+h1,h2,h3,h4,h5,h6{
+  color:var(--color-foreground);
+  margin:0 0 0.5rem 0;
+  font-weight:700;
+  line-height:1.15;
+}
+h1{font-size:2rem}
+h2{font-size:1.5rem}
+h3{font-size:1.25rem}
+.lead{font-size:1.125rem;color:var(--color-muted);margin-bottom:1rem}
+p{margin:0 0 1rem 0;color:var(--color-muted-foreground)}
+
+/* -----------------------------
+   Layout & Sections
+   ----------------------------- */
+.section{padding:var(--space-4) 0;background:transparent}
+.container{width:100%;max-width:1100px;margin-left:auto;margin-right:auto;padding-left:var(--space-3);padding-right:var(--space-3)}
+.flex{display:flex}
+.items-center{align-items:center}
+.justify-between{justify-content:space-between}
+.block{display:block}
+.inline-block{display:inline-block}
+.hidden{display:none}
+
+/* -----------------------------
+   Utilities: spacing / text
+   ----------------------------- */
+.m-0{margin:0}
+.m-1{margin:var(--space-1)}
+.m-2{margin:var(--space-2)}
+.m-3{margin:var(--space-3)}
+.m-4{margin:var(--space-4)}
+.p-1{padding:var(--space-1)}
+.p-2{padding:var(--space-2)}
+.p-3{padding:var(--space-3)}
+.p-4{padding:var(--space-4)}
+.pt-2{padding-top:var(--space-2)}
+.pb-2{padding-bottom:var(--space-2)}
+.py-4{padding-top:var(--space-4);padding-bottom:var(--space-4)}
+
+.text-sm{font-size:0.875rem}
+.text-base{font-size:1rem}
+.text-lg{font-size:1.125rem}
+.text-2xl{font-size:1.5rem}
+.text-muted{color:var(--color-muted)}
+.text-center{text-align:center}
+.font-bold{font-weight:700}
+
+/* Visibility helpers */
+.hidden-sm{display:none}
+@media (min-width:640px){.hidden-sm{display:block}}
+
+/* -----------------------------
+   Links (no underline; blurred-hover)
+   ----------------------------- */
+.link{
+  color:var(--color-primary);
+  text-decoration:none;
+  display:inline-block;
+  padding:2px 6px;
+  border-radius:6px;
+  transition:background-color .16s ease,transform .12s ease;
+}
+.link:hover{
+  background:var(--link-hover);
+  /* Using background-color instead of backdrop-filter avoids affecting surrounding areas */
+  text-decoration:none;
+  transform:translateY(-2px);
+}
+[data-theme="dark"] .link:hover{background:var(--link-hover-dark)}
+
+/* Ensure nav links only affect their own area (avoid full-width dark overlays) */
+nav[aria-label="Primary navigation"] a:hover{background:var(--link-hover);transform:translateY(-2px)}
+[data-theme="dark"] nav[aria-label="Primary navigation"] a:hover{background:var(--link-hover-dark)}
+.link:focus-visible{outline:2px solid var(--color-primary);outline-offset:3px}
+
+/* Optional pill that avoids layout shift when used often */
+.link-pill{padding:6px 10px;border-radius:9999px}
+
+/* Accent utility */
+.accent{color:var(--color-accent);font-weight:700}
+
+/* Subtle accent underline for inline emphasis */
+.accent-underline{background:linear-gradient(90deg,var(--color-accent),var(--color-warm));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* -----------------------------
+   Buttons
+   ----------------------------- */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 16px;
+  border-radius:calc(var(--radius-md) - 4px);
+  cursor:pointer;
+  border:1px solid transparent;
+  transition:box-shadow .14s ease, transform .12s ease, opacity .12s ease;
+  font-weight:600;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.btn:active{transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.btn-primary{background:linear-gradient(90deg,var(--color-primary),var(--color-accent));color:var(--color-primary-contrast);box-shadow:0 12px 40px rgba(13,62,112,0.12);border-bottom:2px solid rgba(0,0,0,0.06)}
+.btn-primary:hover{transform:translateY(-4px);box-shadow:0 18px 50px rgba(13,62,112,0.16)}
+.btn-ghost{background:transparent;border:1px solid rgba(15,23,36,0.06);color:var(--color-foreground)}
+
+/* -----------------------------
+   Forms & cards
+   ----------------------------- */
+ .input{width:100%;padding:10px;border:1px solid rgba(15,23,36,0.06);border-radius:calc(var(--radius-sm));background:var(--input-bg);box-shadow:inset 0 2px 6px rgba(2,6,23,0.04)}
+[data-theme="dark"] .input{background:var(--input-bg);border:1px solid rgba(255,255,255,0.06)}
+.textarea{min-height:120px}
+.fieldset{border:1px solid #e6e9ee;padding:16px;border-radius:var(--radius-md)}
+ .card{position:relative;overflow:hidden;background:var(--surface-overlay);backdrop-filter:blur(6px);border-radius:var(--radius-md);padding:20px;box-shadow:var(--shadow-sm);border:1px solid rgba(2,6,23,0.04);transition:transform .12s ease,box-shadow .12s ease} 
+.card::before{content:"";position:absolute;left:0;top:0;height:4px;width:48px;border-radius:0 0 8px 8px;background:linear-gradient(90deg,var(--color-primary),var(--color-warm));transform:translateY(-6px);opacity:0;transition:transform .18s ease,opacity .18s ease}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.card:hover::before{transform:translateY(0);opacity:1}
+
+/* Focus states */
+.input:focus,.textarea:focus,.nh-toggle:focus,.nh-nav-toggle:focus,button:focus{
+  outline:none;
+  box-shadow:0 0 0 4px rgba(13,110,253,0.12);
+  border-color:var(--color-primary);
+}
+
+/* -----------------------------
+/* Header & Primary Navigation (component) --------------------------------- */
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  min-height:var(--header-height);
+  display:block;
+  padding:0;
+  /* subtle semi-transparent surface so the global gradient shows through */
+  backdrop-filter:blur(6px);
+  background:var(--surface-overlay);
+  border-bottom:1px solid rgba(0,0,0,0.04);
+  /* performant transitions only (avoid transitioning layout-heavy properties) */
+  transition:background-color .2s ease, backdrop-filter .2s ease, height .18s ease;
+}
+
+/* Dark header variant (now driven by --header-bg in the dark theme block) */
+/* header styles respect --header-bg */
+
+/* inner area centers the brand but allows absolute-positioned controls */
+header > div{max-width:1100px;margin-left:auto;margin-right:auto;display:flex;align-items:center;justify-content:center;gap:var(--space-4);padding-left:var(--space-3);padding-right:var(--space-3);position:relative;height:var(--header-height)}
+
+header h1{margin:0;font-size:1.25rem;font-weight:800;text-align:center}
+header p{margin:0;font-size:0.95rem;color:var(--color-muted);font-weight:500;text-align:center}
+
+/* nav & toggles positioned around centered brand */
+nav[aria-label="Primary navigation"]{position:absolute;right:calc(var(--space-3) + 56px);top:50%;transform:translateY(-50%)}
+header .nh-toggle{position:absolute;right:var(--space-3);top:50%;transform:translateY(-50%);z-index:1102}
+header .nh-nav-toggle{position:absolute;left:var(--space-3);top:50%;transform:translateY(-50%);z-index:1102}
+@media (min-width:640px){header .nh-nav-toggle{display:none}}
+
+/* Primary nav floats to the right on larger screens and becomes pill-buttons */
+nav[aria-label="Primary navigation"]{position:relative}
+nav[aria-label="Primary navigation"] ul{list-style:none;padding:0;margin:0;display:flex;gap:var(--space-2);align-items:center}
+nav[aria-label="Primary navigation"] a{
+  display:inline-flex;padding:6px 10px;border-radius:9999px;text-decoration:none;border:1px solid transparent;color:var(--color-foreground);background:transparent;transition:background-color .14s ease,transform .12s ease}
+  nav[aria-label="Primary navigation"] a:focus-visible{outline:2px solid var(--color-primary);outline-offset:3px}
+
+/* Small-screen: nav overlay (transition-friendly)
+   Uses visibility/opacity/transform so opening/closing animates smoothly
+*/
+@media (max-width:639px){
+  nav[aria-label="Primary navigation"]{
+    position:fixed;
+    top:var(--header-height);
+    left:0;right:0;bottom:0;
+    background:var(--color-surface);
+    padding:24px;
+    overflow:auto;
+    z-index:999;
+
+    /* hidden state */
+    visibility:hidden;
+    opacity:0;
+    transform:translateY(-8px);
+    pointer-events:none;
+    transition:opacity .22s ease, transform .22s ease, visibility 0s linear .22s;
+  }
+
+  nav[aria-label="Primary navigation"][data-open="true"]{
+    visibility:visible;
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+    transition-delay:0s;
+  }
+}
+
+/* Desktop: show nav inline (table layout for cleaner collapse) */
+@media (min-width:640px){
+  nav[aria-label="Primary navigation"]{display:table;position:static;inset:auto;padding:0}
+  nav[aria-label="Primary navigation"] ul{display:table-row;list-style:none;padding:0;margin:0}
+  nav[aria-label="Primary navigation"] ul li{display:table-cell;padding-right:var(--space-2);vertical-align:middle}
+  nav[aria-label="Primary navigation"] a{display:inline-block;padding:6px 10px;border-radius:9999px}
+  .nh-nav-toggle{display:none}
+}
+
+/* Hero section styling — now a full first-page centerpiece */
+section[aria-labelledby="hero-heading"], .hero{min-height:calc(100vh - var(--header-height));display:flex;align-items:center;justify-content:center;padding:var(--space-5) 0;text-align:center;flex-direction:column}
+section[aria-labelledby="hero-heading"] h2, .hero h2{font-size:clamp(2rem,6vw,4rem);margin:0 0 .75rem 0;font-weight:900;line-height:1.02;font-family:var(--font-heading);letter-spacing:0.4px;background:linear-gradient(90deg,var(--color-primary),var(--color-accent));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 10px 30px rgba(21,62,117,0.06)}
+@media (min-width:1024px){section[aria-labelledby="hero-heading"] h2, .hero h2{font-size:4rem}}
+section[aria-labelledby="hero-heading"] p, .hero p{max-width:70ch;margin-left:auto;margin-right:auto;color:var(--color-muted-foreground);font-size:1.125rem}
+
+/* Ensure anchored sections account for the sticky header */
+section{scroll-margin-top:calc(var(--header-height) + 8px)}
+
+/* -----------------------------
+   Components
+   ----------------------------- */
+
+/* Badge (small status pill) */
+.badge{display:inline-block;padding:4px 8px;font-size:.75rem;border-radius:9999px;background:rgba(15,23,36,0.05);color:var(--color-foreground)}
+[data-theme="dark"] .badge{background:rgba(230,238,248,0.04)}
+
+/* Avatar (circle) */
+.avatar{width:40px;height:40px;border-radius:50%;overflow:hidden;display:inline-block;background:var(--avatar-bg)}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block} 
+
+/* Chip (icon + text) */
+.chip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:9999px;background:var(--link-hover);}
+
+/* Card grid */
+.card-grid{display:grid;gap:var(--space-3);grid-template-columns:1fr}
+@media (min-width:640px){.card-grid{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1024px){.card-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* -----------------------------
+   About section & Features
+   ----------------------------- */
+.about-grid{display:grid;grid-template-columns:1fr;gap:var(--space-4);align-items:center}
+@media (min-width:768px){.about-grid{grid-template-columns:1fr 1fr}}
+.about-illustration{width:100%;height:320px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--color-muted-foreground);font-weight:600;background:var(--surface-overlay);border:1px solid rgba(0,0,0,0.04)}
+.about-features{display:grid;gap:var(--space-3);grid-template-columns:1fr}
+@media (min-width:768px){.about-features{grid-template-columns:repeat(2,1fr)}}
+.feature{background:transparent;border-radius:8px;padding:14px;border:1px solid rgba(0,0,0,0.04);box-shadow:var(--shadow-sm)}
+.feature h4{margin:0 0 0.5rem 0}
+.feature p{margin:0;color:var(--color-muted-foreground)}
+
+/* -----------------------------
+   Insights (cards) styling
+   ----------------------------- */
+#insights .card{background:var(--surface-overlay);border-radius:12px;padding:18px;margin-bottom:12px;box-shadow:var(--shadow-sm);border:1px solid rgba(0,0,0,0.04)}
+#insights .card header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+#insights .card header h3{margin:0;font-size:1.125rem}
+#insights .card p{color:var(--color-muted-foreground)}
+
+/* -----------------------------
+   Contact form styling
+   ----------------------------- */
+#contact .container{max-width:720px}
+#contact label{display:block;margin-bottom:8px;font-weight:700}
+#contact .input,#contact textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:transparent;color:inherit}
+#contact .btn-send{padding:10px 14px;border-radius:8px;border:0;cursor:pointer}
+
+/* -----------------------------
+   Footer styling
+   ----------------------------- */
+footer{background:var(--footer-bg);color:var(--footer-text);padding:var(--space-5) 0;border-top:1px solid rgba(0,0,0,0.06)}
+footer .footer-grid{display:grid;grid-template-columns:1fr;gap:var(--space-4);align-items:start}
+@media(min-width:768px){footer .footer-grid{grid-template-columns:2fr 1fr 1fr}}
+footer .brand{font-weight:800;font-size:1.125rem;margin-bottom:.5rem}
+footer nav ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+footer a{color:inherit;text-decoration:none}
+footer small{display:block;margin-top:var(--space-2);color:var(--color-muted-foreground)}
+
+/* Message toggle (compact toggleable message panel) ----------------------- */
+.message-toggle{position:fixed;right:18px;bottom:18px;z-index:1200;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.message-toggle-button{width:44px;height:44px;border-radius:10px;background:var(--surface-overlay);border:1px solid rgba(0,0,0,0.06);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-sm);transition:transform .12s ease,opacity .12s ease}
+.message-toggle-button:active{transform:translateY(1px)}
+
+.message-panel{width:320px;max-width:calc(100% - 36px);background:var(--surface-overlay-strong);color:var(--color-foreground);border-radius:12px;padding:12px;box-shadow:0 18px 40px rgba(2,6,23,0.12);transform:translateY(8px);opacity:0;pointer-events:none;transition:transform .18s ease,opacity .18s ease}
+.message-toggle[data-open="true"] .message-panel{transform:translateY(0);opacity:1;pointer-events:auto}
+.message-panel form{display:flex;flex-direction:column;gap:8px}
+.message-panel textarea{width:100%;min-height:96px;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:transparent;color:inherit}
+.message-panel .btn-send{align-self:flex-end;padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,var(--color-primary),var(--color-accent));color:var(--color-primary-contrast);border:0;cursor:pointer}
+
+/* Dark theme tweaks for message toggle */
+[data-theme="dark"] .message-toggle-button{border:1px solid rgba(255,255,255,0.03);background:rgba(255,255,255,0.02)}
+[data-theme="dark"] .message-panel{background:rgba(10,12,16,0.9);color:var(--color-foreground)}
+
+/* Ensure About section explicitly uses dark surfaces and readable text when theme toggles */
+[data-theme="dark"] #about{background:var(--surface-overlay);background-image:none;color:var(--color-foreground);border-color:rgba(255,255,255,0.04)}
+[data-theme="dark"] #about .about-illustration{background:var(--surface-overlay);background-image:none;color:var(--color-muted-foreground);border:1px solid rgba(255,255,255,0.04)}
+[data-theme="dark"] #about .about-features .feature{background:var(--surface-overlay);border:1px solid rgba(255,255,255,0.04)}
+[data-theme="dark"] #about h2{color:var(--color-foreground)}
+[data-theme="dark"] #about p,.about-grid p{color:var(--color-muted-foreground)}
+
+/* Footer component: using the <footer> selector above for layout/styling; .footer class removed to avoid duplication */
+/* (dark theme border handled on footer selector) */
+
+/* Hero animation */
+.hero-animate{animation:nh-fadeUp .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes nh-fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* Nav floating: when applied, primary nav floats above content */
+ .nav-floating{display:none;} /* Removed toggle navigation */
+/* dark nav-floating handled via --nav-floating-bg */
+
+/* Header collapse behavior: hide nav and reduce header when user scrolls down */
+.header-collapsed{min-height:22px}
+.header-collapsed header > div{height:22px;max-width:640px;padding-left:calc(var(--space-3)/2);padding-right:calc(var(--space-3)/2)}
+.header-collapsed header h1{font-size:1rem;transform:translateY(-6px)}
+.header-collapsed header p{opacity:0;transform:translateY(-6px);pointer-events:none;height:0;margin:0}
+/* When header collapses hide nav entirely to avoid hover/glitch issues */
+.header-collapsed nav[aria-label="Primary navigation"]{display:none !important;opacity:0;transform:none;pointer-events:none}
+.header-collapsed .nav-floating{display:none;} /* Removed toggle navigation */
+.nav a:hover { font-weight: bold; } /* Change text to bold on hover */
+
+/* Smooth transitions for header, inner area, and text */
+
+header > div{transition:max-width .25s cubic-bezier(.2,.9,.2,1),padding .18s ease,height .18s ease}
+header h1, header p, nav[aria-label="Primary navigation"] a{transition:transform .18s ease,opacity .18s ease,font-size .18s ease}
+
+/* Theme toggle: hide only when header is collapsed so it reappears on scroll-up */
+header .nh-toggle{opacity:1;transform:translateY(0);transition:opacity .18s ease,transform .18s ease;pointer-events:auto}
+.header-collapsed .nh-toggle{opacity:0;transform:translateY(-6px);pointer-events:none}
+
+/* Toggle buttons (script-injected) ----------------------------------------- */
+/* Dark-mode toggle: compact and subtle */
+.nh-toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;
+  height:28px;
+  padding:4px;
+  border-radius:6px;
+  background:transparent;
+  border:1px solid rgba(0,0,0,0.04);
+  box-shadow:none;
+  cursor:pointer;
+  font-size:.875rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove border/shadow on mouse click or focus via pointer (keep keyboard focus-visible outline) */
+.nh-toggle:active,
+.nh-toggle:focus:not(:focus-visible){
+  outline: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* Nav toggle keeps the original affordance */
+.nh-nav-toggle{display:inline-flex;align-items:center;justify-content:center;padding:6px;border-radius:6px;background:var(--color-surface);border:1px solid rgba(0,0,0,0.06);box-shadow:0 1px 2px rgba(16,24,40,0.04);cursor:pointer}
+.nh-nav-toggle:hover{transform:translateY(-1px)}
+
+/* Dark theme: make the dark-mode toggle even more subtle when visible and remove border on click */
+[data-theme="dark"] .nh-toggle{transition:opacity .18s ease, transform .18s ease;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);box-shadow:none}
+[data-theme="dark"] .nh-toggle:hover{transform:none;box-shadow:none}
+[data-theme="dark"] .nh-toggle:active,
+[data-theme="dark"] .nh-toggle:focus:not(:focus-visible){
+  border-color: transparent;
+  box-shadow: none;
+}
+/* -----------------------------
+   Responsive helpers
+   ----------------------------- */
+@media (min-width:640px){.sm\:grid-cols-2{display:grid;grid-template-columns:repeat(2,1fr)}.sm\:text-lg{font-size:1.125rem}}
+@media (min-width:768px){.md\:flex{display:flex}}
+@media (min-width:1024px){.lg\:container{max-width:1200px}}
+
+/* -----------------------------
+   Misc / Utilities
+   ----------------------------- */
+:focus{outline-offset:2px}
+:focus-visible{outline:2px solid var(--color-primary)}
+.transition{transition:opacity .18s ease,transform .18s ease,background-color .18s ease,border-color .18s ease}
+.show{display:block}
+.hide{display:none}
