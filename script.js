@@ -1,184 +1,193 @@
-/* NoviceHall - tiny JS helpers
-   - Injects a dark-mode toggle button
-   - Injects a mobile nav toggle (works without editing HTML)
-   - Exposes helpers on window.NoviceHall
-*/
-(function () {
-  'use strict';
+(() => {
+  const root = document.documentElement;
+  const schemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const themeToggle = document.querySelector(".theme-toggle");
+  const topbar = document.querySelector(".topbar");
+  const nav = document.querySelector(".nav");
+  const toggle = document.querySelector(".menu-toggle");
+  const navLinks = document.querySelectorAll(".nav a");
+  const revealItems = document.querySelectorAll(".reveal");
+  const aliveItems = document.querySelectorAll(".card, .hero-band article, .panel, .section-head");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const themeStorageKey = "nh-theme-override";
 
-  const NH = {
-    toggleClass(el, cls) { if (!el) return; el.classList.toggle(cls); },
-    setTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      try { localStorage.setItem('nh-theme', theme); } catch (e) {}
-    },
-    prefersDark() { return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; },
-    initTheme() {
-      try {
-        const saved = localStorage.getItem('nh-theme');
-        const theme = saved || (NH.prefersDark() ? 'dark' : 'light');
-        NH.setTheme(theme);
-      } catch (e) { NH.setTheme(NH.prefersDark() ? 'dark' : 'light'); }
-    }
+  const updateToggleLabel = (theme) => {
+    if (!themeToggle) return;
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    themeToggle.setAttribute("aria-label", `Switch to ${nextTheme} theme`);
+    themeToggle.setAttribute("title", `Switch to ${nextTheme} theme`);
   };
 
-  // expose lightweight API
-  window.NoviceHall = Object.assign(window.NoviceHall || {}, NH);
+  const applyTheme = (theme) => {
+    root.setAttribute("data-theme", theme);
+    updateToggleLabel(theme);
+  };
 
-  document.addEventListener('DOMContentLoaded', () => {
-    NH.initTheme();
-
-    // Dark-mode toggle (injected into header when present)
-    const darkBtn = document.createElement('button');
-    darkBtn.type = 'button';
-    darkBtn.className = 'nh-toggle transition';
-    darkBtn.setAttribute('aria-label', 'Toggle dark mode');
-    darkBtn.title = 'Toggle dark mode';
-    darkBtn.innerHTML = '🌓';
-    darkBtn.addEventListener('click', () => {
-      const next = (document.documentElement.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
-      NH.setTheme(next);
-    });
-    const headerEl = document.querySelector('header');
-    if (headerEl) headerEl.appendChild(darkBtn); else document.body.appendChild(darkBtn);
-
-    // Mobile nav toggle
-    const nav = document.querySelector('nav[aria-label="Primary navigation"]');
-    if (nav) {
-      // ensure id exists so aria-controls points somewhere
-      if (!nav.id) nav.id = 'primary-navigation';
-      nav.setAttribute('data-open', 'false');
-      nav.setAttribute('aria-expanded', 'false');
-
-      const navBtn = document.createElement('button');
-      navBtn.type = 'button';
-      navBtn.className = 'nh-nav-toggle transition';
-      navBtn.setAttribute('aria-controls', nav.id);
-      navBtn.setAttribute('aria-label', 'Toggle navigation');
-      navBtn.title = 'Toggle navigation';
-      navBtn.innerHTML = '☰';
-
-      navBtn.addEventListener('click', () => {
-        const open = nav.getAttribute('data-open') === 'true';
-        const next = !open;
-        nav.setAttribute('data-open', String(next));
-        nav.setAttribute('aria-expanded', String(next));
-        // lock body scroll when overlay is open
-        document.body.style.overflow = next ? 'hidden' : '';
-      });
-
-      if (headerEl) headerEl.appendChild(navBtn); else document.body.appendChild(navBtn);
-
-      // close nav when clicking outside
-      document.addEventListener('click', (e) => {
-        if (nav.getAttribute('data-open') !== 'true') return;
-        if (nav.contains(e.target) || e.target === navBtn) return;
-        nav.setAttribute('data-open', 'false');
-        nav.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      });
-
-      // keyboard: ESC closes nav
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && nav.getAttribute('data-open') === 'true') {
-          nav.setAttribute('data-open', 'false');
-          nav.setAttribute('aria-expanded', 'false');
-          document.body.style.overflow = '';
-        }
-      });
-
-      // expose toggle function
-      NH.toggleNav = (on) => {
-        const next = (typeof on === 'boolean') ? on : nav.getAttribute('data-open') !== 'true';
-        nav.setAttribute('data-open', String(next));
-        nav.setAttribute('aria-expanded', String(next));
-      };
-
-      // small UX: nav floats to top-right when cursor is near top or when hovered
-      (function setupNavFloating(){
-        let pinned = false;
-        let raf = null;
-        const setPinned = (v) => {
-          if (pinned === v) return;
-          pinned = v;
-          nav.classList.toggle('nav-floating', !!v);
-        };
-
-        document.addEventListener('mousemove', (e) => {
-          if (window.innerWidth < 640) return; // skip on small screens
-          const should = (e.clientY <= 64) || nav.matches(':hover');
-          if (should !== pinned) {
-            if (raf) cancelAnimationFrame(raf);
-            raf = requestAnimationFrame(() => setPinned(should));
-          }
-        });
-
-        nav.addEventListener('mouseenter', () => setPinned(true));
-        nav.addEventListener('mouseleave', () => { if (nav.getAttribute('data-open') !== 'true') setPinned(false); });
-
-        // reflect toggle calls
-        const originalToggle = NH.toggleNav;
-        NH.toggleNav = (on) => {
-          originalToggle(on);
-          if (typeof on === 'boolean') nav.classList.toggle('nav-floating', !!on);
-          // lock body scroll when nav is opened programmatically
-          const open = nav.getAttribute('data-open') === 'true';
-          document.body.style.overflow = open ? 'hidden' : '';
-        };
-      })();
+  // Default theme follows browser unless user toggles manually.
+  const savedTheme = (() => {
+    try {
+      const value = localStorage.getItem(themeStorageKey);
+      return value === "light" || value === "dark" ? value : null;
+    } catch (error) {
+      return null;
     }
+  })();
+  let hasManualOverride = Boolean(savedTheme);
 
-    // collapse header on scroll down, expand on scroll up
-    (function setupScrollCollapse(){
-      let last = window.scrollY || 0;
-      let ticking = false;
-      let collapsed = false;
-      const headerEl = document.querySelector('header');
-      if (!headerEl) return;
-
-      // debounce/lock to prevent rapid toggles
-      let lastToggle = 0;
-      const TOGGLE_LOCK = 260; // ms
-      const MIN_DELTA = 24; // px - ignore tiny scrolls
-
-      function update(){
-        const current = window.scrollY || 0;
-        const delta = current - last;
-
-        // ignore very small scrolls
-        if (Math.abs(delta) < MIN_DELTA) { last = current; ticking = false; return; }
-
-        const now = Date.now();
-
-        // collapse when scrolling down sufficiently past threshold and not already collapsed
-        if (current > 120 && delta > 0 && !collapsed && (now - lastToggle) > TOGGLE_LOCK) {
-          headerEl.classList.add('header-collapsed');
-          collapsed = true;
-          lastToggle = now;
-        }
-        // expand when scrolling up sufficiently or near top, respecting lock
-        else if (((current < 80 && delta < 0 && collapsed) || current <= 40) && (now - lastToggle) > TOGGLE_LOCK) {
-          headerEl.classList.remove('header-collapsed');
-          collapsed = false;
-          lastToggle = now;
-        }
-
-        last = current;
-        ticking = false;
-      }
-
-      window.addEventListener('scroll', () => {
-        if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
-      }, { passive: true });
-    })();
-
-    // convenience: reflect theme changes on root as attribute change event
-    const obs = new MutationObserver(() => {
-      const t = document.documentElement.getAttribute('data-theme');
-      document.documentElement.style.colorScheme = (t === 'dark') ? 'dark' : 'light';
-    });
-    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
+  applyTheme(savedTheme || (schemeQuery.matches ? "dark" : "light"));
+  schemeQuery.addEventListener("change", (e) => {
+    if (hasManualOverride) return;
+    applyTheme(e.matches ? "dark" : "light");
   });
 
+  if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+      const current = root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      const next = current === "dark" ? "light" : "dark";
+      applyTheme(next);
+      try {
+        localStorage.setItem(themeStorageKey, next);
+        hasManualOverride = true;
+      } catch (error) {}
+    });
+  }
+
+  // Sticky header polish without layout thrash.
+  let ticking = false;
+  const updateTopbar = () => {
+    if (!topbar) return;
+    topbar.classList.toggle("is-scrolled", window.scrollY > 16);
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    root.style.setProperty("--scroll-progress", Math.max(0, Math.min(100, progress)).toFixed(2));
+    ticking = false;
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateTopbar);
+    },
+    { passive: true }
+  );
+  updateTopbar();
+
+  // Mobile menu.
+  if (toggle && nav) {
+    const closeMenu = () => {
+      nav.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+    };
+
+    toggle.addEventListener("click", () => {
+      const isOpen = nav.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    navLinks.forEach((link) => link.addEventListener("click", closeMenu));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
+  }
+
+  // Section reveals for a fluid first-load feel.
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("in-view");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    revealItems.forEach((item) => io.observe(item));
+  } else {
+    revealItems.forEach((item) => item.classList.add("in-view"));
+  }
+
+  // Staggered motion on content blocks for a livelier scroll feel.
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    aliveItems.forEach((item, index) => {
+      item.classList.add("alive-item");
+      item.style.setProperty("--enter-delay", `${(index % 6) * 42}ms`);
+    });
+
+    const aliveObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.18, rootMargin: "0px 0px -6% 0px" }
+    );
+
+    aliveItems.forEach((item) => aliveObserver.observe(item));
+  } else {
+    aliveItems.forEach((item) => {
+      item.classList.add("alive-item", "is-visible");
+    });
+  }
+
+  // Subtle background drift tied to pointer for premium depth.
+  if (!reduceMotion) {
+    // Lightweight pointer tilt for premium depth on interactive blocks.
+    const tiltTargets = document.querySelectorAll(".card, .hero-band article");
+    tiltTargets.forEach((el) => {
+      let tiltRaf = null;
+      let nextX = 0;
+      let nextY = 0;
+
+      el.addEventListener(
+        "pointermove",
+        (e) => {
+          if (e.pointerType && e.pointerType !== "mouse") return;
+          const rect = el.getBoundingClientRect();
+          nextX = (e.clientX - rect.left) / rect.width;
+          nextY = (e.clientY - rect.top) / rect.height;
+          if (tiltRaf) return;
+
+          tiltRaf = requestAnimationFrame(() => {
+            const rx = (0.5 - nextY) * 4.2;
+            const ry = (nextX - 0.5) * 5.4;
+            el.style.setProperty("--tilt-x", `${rx.toFixed(2)}deg`);
+            el.style.setProperty("--tilt-y", `${ry.toFixed(2)}deg`);
+            tiltRaf = null;
+          });
+        },
+        { passive: true }
+      );
+
+      el.addEventListener("pointerleave", () => {
+        if (tiltRaf) {
+          cancelAnimationFrame(tiltRaf);
+          tiltRaf = null;
+        }
+        el.style.setProperty("--tilt-x", "0deg");
+        el.style.setProperty("--tilt-y", "0deg");
+      });
+    });
+
+    let rafId = null;
+    window.addEventListener(
+      "pointermove",
+      (e) => {
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+          const x = (e.clientX / window.innerWidth - 0.5) * 18;
+          const y = (e.clientY / window.innerHeight - 0.5) * 16;
+          root.style.setProperty("--mx", `${x}px`);
+          root.style.setProperty("--my", `${y}px`);
+          rafId = null;
+        });
+      },
+      { passive: true }
+    );
+  }
 })();

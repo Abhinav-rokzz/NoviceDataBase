@@ -1,162 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoviceHall</title>
-    <meta name="description" content="Professional semantic website framework">
-        <link rel="stylesheet" href="framework.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoviceHall | Train, Hire, and Grow in Skilled Trades</title>
+  <meta name="description" content="NoviceHall is a nonprofit open-source platform where trade professionals mentor newcomers, hire apprentices, and help people find the right trade schools.">
+  <link rel="stylesheet" href="framework.css">
 </head>
 <body>
-    <header>
-        <div>
-            <h1>NoviceHall</h1>
-        </div>
+  <div class="site-bg" aria-hidden="true"></div>
 
-        <!-- Primary Navigation -->
-        <nav id="primary-navigation" aria-label="Primary navigation">
-            <ul>
-                <li><a href="#Lounge">Lounge</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#insights">Insights</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header class="topbar" id="top">
+    <div class="container topbar-inner">
+      <a href="#top" class="brand">NoviceHall</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">Menu</button>
+      <nav id="primary-navigation" class="nav" aria-label="Primary navigation">
+        <a href="#pathways">Pathways</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#schools">Trade Schools</a>
+        <a href="#contribute">Contribute</a>
+      </nav>
+      <a class="btn btn-ghost" href="#contribute">Join Builders</a>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.2 14.2A8.8 8.8 0 1 1 9.8 3.8a7.2 7.2 0 1 0 10.4 10.4z"></path>
+        </svg>
+        <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"></circle>
+          <path d="M12 2.7v2.4M12 18.9v2.4M4.7 12h2.4M16.9 12h2.4M5.9 5.9l1.7 1.7M16.4 16.4l1.7 1.7M18.1 5.9l-1.7 1.7M7.6 16.4l-1.7 1.7"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
 
-    <!-- Main Content -->
-    <main id="Lounge">
-
-        <!-- Hero / Introduction -->
-        <section aria-labelledby="hero-heading" class="hero">
-            <h2 id="hero-heading">Learn from Industry Veterans</h2>
-            <p>
-                Get the Initial momentum for your journey, Know about the basics of your trade and business
-                from people who have been there and done that.            
-            </p>
-        </section>
-
-        <!-- About -->
-        <section id="about" aria-labelledby="about-heading" class="section">
-          <div class="container about-grid">
-            <div>
-              <h2 id="about-heading">About Us</h2>
-              <p class="lead">We help early-career professionals accelerate by learning directly from experienced practitioners. Our curated mentorship, practical workshops, and community events focus on real-world outcomes.</p>
-
-              <div class="about-features">
-                <div class="feature">
-                  <h4>Mentorship</h4>
-                  <p>Personalized guidance from industry veterans to help you build practical skills and confidence.</p>
-                </div>
-                <div class="feature">
-                  <h4>Workshops</h4>
-                  <p>Hands-on sessions focused on pragmatic skills and portfolio-worthy projects.</p>
-                </div>
-              </div>
-
-              <p style="margin-top:12px;"><a class="btn btn-primary" href="#contact">Contribute</a></p>
-            </div>
-
-            <div class="about-illustration" aria-hidden="true">Illustration</div>
-          </div>
-        </section>
-
-        <!-- Insights / Blog -->
-        <section id="insights" aria-labelledby="insights-heading" class="section">
-          <div class="container">
-            <h2 id="insights-heading">Latest Insights</h2>
-
-            <div class="card-grid">
-              <article class="card">
-                <header>
-                  <h3>Article Title</h3>
-                  <time datetime="2025-01-01">January 1, 2025</time>
-                </header>
-
-                <p>
-                  Short preview of the article to encourage the reader to continue.
-                </p>
-
-                <footer>
-                  <a href="#">Read full article</a>
-                </footer>
-              </article>
-
-              <article class="card">
-                <header>
-                  <h3>Community Spotlight</h3>
-                  <time datetime="2025-02-15">February 15, 2025</time>
-                </header>
-
-                <p>
-                  Highlights and stories from community members and their projects.
-                </p>
-
-                <footer>
-                  <a href="#">Read full article</a>
-                </footer>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <!-- Contact -->
-        <section id="contact" aria-labelledby="contact-heading" class="section">
-          <div class="container">
-            <h2 id="contact-heading">Contact Us</h2>
-
-            <form>
-              <fieldset>
-                <legend class="sr-only">Send us a message</legend>
-
-                <label for="name">Name</label>
-                <input id="name" class="input" type="text" name="name">
-
-                <label for="email">Email</label>
-                <input id="email" class="input" type="email" name="email">
-
-                <label for="message">Message</label>
-                <textarea id="message" class="input" name="message"></textarea>
-
-                <p style="text-align:right;margin-top:10px"><button type="submit" class="btn-send">Send</button></p>
-              </fieldset>
-            </form>
-          </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="footer-grid">
-          <div>
-            <div class="brand">NoviceHall</div>
-            <p>A place for early-career professionals to learn, grow, and connect with industry experts.</p>
-          </div>
-
-          <nav aria-label="Footer navigation">
-            <ul>
-              <li><a href="#about">About</a></li>
-              <li><a href="#services">Services</a></li>
-              <li><a href="#insights">Insights</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </nav>
-
-          <div>
-            <h4>Contact</h4>
-            <address>
-              <a href="mailto:contact@novicehall.com">contact@novicehall.com</a>
-            </address>
-            <small>© <time datetime="2025">2025</time> NoviceHall. All rights reserved.</small>
-          </div>
-        </div>
+  <main>
+    <section class="hero container reveal" id="home">
+      <p class="eyebrow">Nonprofit and Open Source</p>
+      <h1>A welcoming home for skilled trades to train and hire the next generation.</h1>
+      <p class="hero-copy">
+        NoviceHall connects mentors, employers, and schools so newcomers can choose a trade path,
+        build fluency through real practice, and get hired with confidence.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#pathways">Explore Trade Paths</a>
+        <a class="btn btn-soft" href="#contribute">Contribute to the Platform</a>
       </div>
-    </footer>
+      <div class="hero-band" aria-label="Community highlights">
+        <article><strong>Mentors</strong><span>Veterans in HVAC, electrical, plumbing, and welding.</span></article>
+        <article><strong>Hiring</strong><span>Apprenticeship-ready profiles matched to local demand.</span></article>
+        <article><strong>Schools</strong><span>Find programs by career goal, cost, and hands-on hours.</span></article>
+      </div>
+    </section>
 
-    <script src="script.js" defer></script>
+    <section class="section container reveal" id="pathways">
+      <div class="section-head">
+        <h2>Choose your path by the work you want to master</h2>
+        <p>Start with outcomes, then follow guided training and hiring routes built for each trade.</p>
+      </div>
+      <div class="grid cards-3">
+        <article class="card">
+          <h3>Field Trades</h3>
+          <p>HVAC, plumbing, electrical, and maintenance tracks with site-ready skill checkpoints.</p>
+        </article>
+        <article class="card">
+          <h3>Fabrication and Build</h3>
+          <p>Welding, machining, and carpentry tracks with portfolio projects and mentor feedback.</p>
+        </article>
+        <article class="card">
+          <h3>Industrial and Tech</h3>
+          <p>Automation, controls, and technician pathways aligned with modern plant operations.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container reveal" id="how-it-works">
+      <div class="section-head">
+        <h2>How NoviceHall works</h2>
+      </div>
+      <div class="grid cards-3 steps">
+        <article class="card">
+          <span class="step">1</span>
+          <h3>Pick your trade goal</h3>
+          <p>Newcomers choose a target role and get a clear learning sequence.</p>
+        </article>
+        <article class="card">
+          <span class="step">2</span>
+          <h3>Train with practitioners</h3>
+          <p>Mentors publish lessons, exercises, and readiness checks from real field standards.</p>
+        </article>
+        <article class="card">
+          <span class="step">3</span>
+          <h3>Move into paid work</h3>
+          <p>Employers discover prepared candidates and invite them into internships or apprenticeships.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container reveal" id="schools">
+      <div class="panel">
+        <div>
+          <h2>Trade schools, mapped to careers</h2>
+          <p>
+            Compare programs by specialty, hours in the shop, completion time, and job placement signals.
+            We focus on transparency so people can invest in the right training.
+          </p>
+        </div>
+        <a class="btn btn-primary" href="#contribute">Suggest a School</a>
+      </div>
+    </section>
+
+    <section class="section container reveal" id="contribute">
+      <div class="section-head">
+        <h2>Built by community contributors</h2>
+        <p>NoviceHall is a nonprofit open-source platform. You can help as a mentor, educator, employer, designer, or developer.</p>
+      </div>
+      <div class="grid cards-3">
+        <article class="card">
+          <h3>Contribute Content</h3>
+          <p>Share beginner-safe lessons, checklists, and career roadmaps from your trade.</p>
+        </article>
+        <article class="card">
+          <h3>Contribute Code</h3>
+          <p>Help build features, improve accessibility, and keep the platform reliable for all users.</p>
+        </article>
+        <article class="card">
+          <h3>Contribute Opportunities</h3>
+          <p>Post apprenticeships and entry pathways that help newcomers get on-the-job momentum.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>NoviceHall is a nonprofit project for trade training and early-career hiring.</p>
+      <a href="#top" class="btn btn-soft">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
 </body>
 </html>
