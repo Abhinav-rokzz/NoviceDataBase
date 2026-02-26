@@ -119,7 +119,13 @@
 [data-theme="dark"] .avatar{background:var(--avatar-bg)}
 [data-theme="dark"] .lead{color:var(--color-muted)}
 [data-theme="dark"] p{color:var(--color-muted-foreground)}
-[data-theme="dark"] .btn-primary{box-shadow:0 12px 40px rgba(9,24,36,0.12)}
+[data-theme="dark"] .btn-primary{
+  background:linear-gradient(90deg,var(--color-primary),var(--color-accent));
+  color:var(--color-primary-contrast);
+  box-shadow:0 12px 40px rgba(0,0,0,0.36);
+  border-bottom:2px solid rgba(255,255,255,0.04);
+}
+[data-theme="dark"] .btn-primary:hover{transform:translateY(-4px);box-shadow:0 18px 50px rgba(0,0,0,0.5)}
 [data-theme="dark"] .nh-toggle{border:1px solid rgba(255,255,255,0.03)}
 
 [data-theme="dark"] nav[aria-label="Primary navigation"] a{color:var(--color-foreground)}
@@ -388,8 +394,26 @@ nav[aria-label="Primary navigation"] a{
 
 /* Hero section styling — now a full first-page centerpiece */
 section[aria-labelledby="hero-heading"], .hero{min-height:calc(100vh - var(--header-height));display:flex;align-items:center;justify-content:center;padding:var(--space-5) 0;text-align:center;flex-direction:column}
-section[aria-labelledby="hero-heading"] h2, .hero h2{font-size:clamp(2rem,6vw,4rem);margin:0 0 .75rem 0;font-weight:900;line-height:1.02;font-family:var(--font-heading);letter-spacing:0.4px;background:linear-gradient(90deg,var(--color-primary),var(--color-accent));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 10px 30px rgba(21,62,117,0.06)}
-@media (min-width:1024px){section[aria-labelledby="hero-heading"] h2, .hero h2{font-size:4rem}}
+section[aria-labelledby="hero-heading"] h2, .hero h2{
+  font-size:clamp(2rem,6vw,4rem);
+  margin:0 0 .9rem 0;
+  font-weight:900;
+  line-height:1.06; /* increased to prevent descender clipping */
+  font-family:var(--font-heading);
+  letter-spacing:0.4px;
+  background:linear-gradient(90deg,var(--color-primary),var(--color-accent));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:0 10px 30px rgba(21,62,117,0.06);
+}
+@media (min-width:1024px){
+  section[aria-labelledby="hero-heading"] h2, .hero h2{
+    font-size:4rem;
+    line-height:1.12; /* increased for desktop to prevent descender clipping */
+    margin-bottom:1.1rem; /* extra spacing under the heading */
+  }
+}
 section[aria-labelledby="hero-heading"] p, .hero p{max-width:70ch;margin-left:auto;margin-right:auto;color:var(--color-muted-foreground);font-size:1.125rem}
 
 /* Ensure anchored sections account for the sticky header */
