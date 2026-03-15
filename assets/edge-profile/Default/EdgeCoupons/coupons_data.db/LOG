@@ -1,0 +1,4 @@
+2026/03/15-21:39:49.447 2a8c Creating DB c:\Users\Red\Documents\GitHub\NoviceDataBase\assets\edge-profile\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/03/15-21:39:49.455 2a8c Reusing MANIFEST c:\Users\Red\Documents\GitHub\NoviceDataBase\assets\edge-profile\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/03/15-21:39:49.467 3948 Level-0 table #5: started
+2026/03/15-21:39:49.476 3948 Level-0 table #5: 681601 bytes OK

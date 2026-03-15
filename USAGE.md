@@ -17,7 +17,7 @@ This version focuses on a smoother and more welcoming home page for a nonprofit,
 - Added micro-interactions: shimmer on CTA hover, animated nav underline accents, tactile press states, scroll progress line, and pointer-tilt depth on cards/highlights.
 
 ## Files
-- `Untitled-1.html`: Home page structure and content.
+- `index.html`: Home page structure and content.
 - `framework.css`: Visual system, responsive layout, animation styles, and accessibility-focused motion settings.
 - `script.js`: Lightweight interactivity (sticky header state, mobile nav, reveal effects, background drift).
 
