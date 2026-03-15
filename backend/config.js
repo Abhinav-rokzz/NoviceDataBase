@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const ROOT_DIR = path.join(__dirname, "..");
 
 function parseEnvFile(content) {
   const values = {};
@@ -29,7 +30,7 @@ function parseEnvFile(content) {
 
 function loadLocalEnv() {
   [".env.local", ".env"].forEach((fileName) => {
-    const fullPath = path.join(__dirname, fileName);
+    const fullPath = path.join(ROOT_DIR, fileName);
     if (!fs.existsSync(fullPath)) return;
 
     const parsed = parseEnvFile(fs.readFileSync(fullPath, "utf8"));

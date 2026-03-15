@@ -6,7 +6,10 @@ const { loadLocalEnv } = require("./config");
 
 loadLocalEnv();
 
-const DB_PATH = path.join(__dirname, "novicehall.db");
+const ROOT_DIR = path.resolve(__dirname, "..");
+const FRONTEND_PAGES_DIR = path.resolve(ROOT_DIR, "frontend", "pages");
+const FRONTEND_ASSETS_DIR = path.resolve(ROOT_DIR, "frontend", "assets");
+const DB_PATH = path.resolve(ROOT_DIR, "data", "novicehall.db");
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 const adminSessions = new Map();
 
@@ -25,6 +28,15 @@ function ratingToScore(value) {
 
 function clampScore(value) {
   return Math.max(0, Math.min(100, Math.round(value)));
+}
+
+function scoreToBand(value) {
+  const score = clampScore(value);
+  if (score >= 85) return "Excellent";
+  if (score >= 70) return "Strong";
+  if (score >= 55) return "Mixed";
+  if (score <= 0) return "Awaiting data";
+  return "High risk";
 }
 
 function parseCookies(headerValue) {
@@ -266,6 +278,9 @@ function seedDatabase(db) {
 function createApp() {
   const db = openDatabase();
   const app = express();
+  const sendPage = (pageName) => (_req, res) => {
+    res.sendFile(pageName, { root: FRONTEND_PAGES_DIR });
+  };
 
   const insertWorkplace = db.prepare(`
     INSERT INTO workplaces (
@@ -366,7 +381,7 @@ function createApp() {
       location: submission.reviewer_location,
       industry: "Workplace",
       score: average,
-      band: average >= 85 ? "Excellent" : average >= 70 ? "Strong" : average >= 55 ? "Mixed" : "High risk",
+      band: scoreToBand(average),
       verifiedReviews: 0,
       salaryReports: 0,
       beginnerSignal: "First reviewed signal"
@@ -423,7 +438,7 @@ function createApp() {
     const nextScore = clampScore(
       refreshedCategories.reduce((sum, category) => sum + category.value, 0) / Math.max(1, refreshedCategories.length)
     );
-    const nextBand = nextScore >= 85 ? "Excellent" : nextScore >= 70 ? "Strong" : nextScore >= 55 ? "Mixed" : "High risk";
+    const nextBand = scoreToBand(nextScore);
     const nextVerifiedReviews = existingReviewCount + 1;
     const nextSalaryReports = Number(workplace.salary_reports || 0) + (submission.salary_amount ? 1 : 0);
     const nextBeginnerSignal =
@@ -539,7 +554,7 @@ function createApp() {
     const nextScore = clampScore(
       refreshedCategories.reduce((sum, category) => sum + category.value, 0) / Math.max(1, refreshedCategories.length)
     );
-    const nextBand = nextScore >= 85 ? "Excellent" : nextScore >= 70 ? "Strong" : nextScore >= 55 ? "Mixed" : "High risk";
+    const nextBand = scoreToBand(nextScore);
     const nextSalaryReports = Math.max(0, Number(workplace.salary_reports || 0) - (submission.salary_amount ? 1 : 0));
 
     updateWorkplaceMetrics.run({
@@ -795,6 +810,195 @@ function createApp() {
     res.json({ submissions });
   });
 
+  app.get("/api/admin/workplaces", (req, res) => {
+    if (!hasValidAdminSession(req)) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const workplaces = db.prepare(`
+      SELECT
+        id,
+        slug,
+        name,
+        industry,
+        location,
+        tagline,
+        summary,
+        score,
+        band,
+        verified_reviews AS verifiedReviews,
+        salary_reports AS salaryReports,
+        beginner_signal AS beginnerSignal
+      FROM workplaces
+      ORDER BY name ASC
+    `).all();
+
+    res.json({ workplaces });
+  });
+
+  app.post("/api/admin/workplaces", (req, res) => {
+    if (!hasValidAdminSession(req)) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const body = req.body || {};
+    const name = typeof body.name === "string" ? body.name.trim() : "";
+    const slugInput = typeof body.slug === "string" ? body.slug.trim() : "";
+    const industry = typeof body.industry === "string" ? body.industry.trim() : "";
+    const location = typeof body.location === "string" ? body.location.trim() : "";
+    const tagline = typeof body.tagline === "string" ? body.tagline.trim() : "";
+    const summary = typeof body.summary === "string" ? body.summary.trim() : "";
+
+    if (!name || !industry || !location || !tagline || !summary) {
+      res.status(400).json({ error: "All workplace metadata fields are required." });
+      return;
+    }
+
+    const slug = slugify(slugInput || name);
+    if (!slug) {
+      res.status(400).json({ error: "A valid slug could not be created." });
+      return;
+    }
+
+    if (db.prepare("SELECT 1 FROM workplaces WHERE slug = ?").get(slug)) {
+      res.status(400).json({ error: "That slug is already in use." });
+      return;
+    }
+
+    const result = insertWorkplace.run({
+      slug,
+      name,
+      tagline,
+      summary,
+      location,
+      industry,
+      score: 0,
+      band: "Awaiting data",
+      verifiedReviews: 0,
+      salaryReports: 0,
+      beginnerSignal: "Awaiting approved reviews"
+    });
+
+    [
+      ["Pay fairness", 0],
+      ["Management treatment", 0],
+      ["Workplace environment", 0],
+      ["Growth", 0],
+      ["Reliability", 0]
+    ].forEach(([label, value], index) => {
+      insertCategory.run(result.lastInsertRowid, label, value, index);
+    });
+
+    res.status(201).json({
+      workplace: {
+        id: result.lastInsertRowid,
+        slug,
+        name,
+        industry,
+        location,
+        tagline,
+        summary,
+        score: 0,
+        band: "Awaiting data",
+        verifiedReviews: 0,
+        salaryReports: 0,
+        beginnerSignal: "Awaiting approved reviews"
+      }
+    });
+  });
+
+  app.post("/api/admin/workplaces/:id", (req, res) => {
+    if (!hasValidAdminSession(req)) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id) || id <= 0) {
+      res.status(400).json({ error: "Invalid workplace id." });
+      return;
+    }
+
+    const existing = db.prepare(`
+      SELECT id, slug, score, band, verified_reviews AS verifiedReviews, salary_reports AS salaryReports, beginner_signal AS beginnerSignal
+      FROM workplaces
+      WHERE id = ?
+    `).get(id);
+    if (!existing) {
+      res.status(404).json({ error: "Workplace not found." });
+      return;
+    }
+
+    const body = req.body || {};
+    const name = typeof body.name === "string" ? body.name.trim() : "";
+    const slugInput = typeof body.slug === "string" ? body.slug.trim() : "";
+    const industry = typeof body.industry === "string" ? body.industry.trim() : "";
+    const location = typeof body.location === "string" ? body.location.trim() : "";
+    const tagline = typeof body.tagline === "string" ? body.tagline.trim() : "";
+    const summary = typeof body.summary === "string" ? body.summary.trim() : "";
+
+    if (!name || !industry || !location || !tagline || !summary) {
+      res.status(400).json({ error: "All workplace metadata fields are required." });
+      return;
+    }
+
+    const slug = slugify(slugInput || existing.slug);
+    if (!slug) {
+      res.status(400).json({ error: "A valid slug is required." });
+      return;
+    }
+
+    const duplicate = db.prepare("SELECT id FROM workplaces WHERE slug = ? AND id <> ?").get(slug, id);
+    if (duplicate) {
+      res.status(400).json({ error: "That slug is already in use by another workplace." });
+      return;
+    }
+
+    db.prepare(`
+      UPDATE workplaces
+      SET name = @name,
+          slug = @slug,
+          industry = @industry,
+          location = @location,
+          tagline = @tagline,
+          summary = @summary
+      WHERE id = @id
+    `).run({
+      id,
+      name,
+      slug,
+      industry,
+      location,
+      tagline,
+      summary
+    });
+
+    db.prepare(`
+      UPDATE review_submissions
+      SET workplace_name = ?, workplace_slug = ?
+      WHERE workplace_id = ?
+    `).run(name, slug, id);
+
+    res.json({
+      workplace: {
+        id,
+        slug,
+        name,
+        industry,
+        location,
+        tagline,
+        summary,
+        score: existing.score,
+        band: existing.band,
+        verifiedReviews: existing.verifiedReviews,
+        salaryReports: existing.salaryReports,
+        beginnerSignal: existing.beginnerSignal
+      }
+    });
+  });
+
   app.post("/api/admin/reviews/:id/decision", (req, res) => {
     if (!hasValidAdminSession(req)) {
       res.status(401).json({ error: "Unauthorized" });
@@ -865,19 +1069,19 @@ function createApp() {
     res.json({ ok: true });
   });
 
-  app.get("/admin-login.html", (_req, res) => {
-    res.sendFile(path.join(__dirname, "admin-login.html"));
-  });
+  app.get("/", sendPage("index.html"));
+  app.get("/index.html", sendPage("index.html"));
+  app.get("/workplace-score.html", sendPage("workplace-score.html"));
+  app.get("/companies.html", sendPage("companies.html"));
+  app.get("/company.html", sendPage("company.html"));
+  app.get("/review-workplace.html", sendPage("review-workplace.html"));
+  app.get("/admin-login.html", sendPage("admin-login.html"));
+  app.get("/admin.html", requireAdminAuth, sendPage("admin.html"));
+  app.get("/admin-data.html", requireAdminAuth, sendPage("admin-data.html"));
+  app.get("/admin-workplaces.html", requireAdminAuth, sendPage("admin-workplaces.html"));
 
-  app.get("/admin.html", requireAdminAuth, (_req, res) => {
-    res.sendFile(path.join(__dirname, "admin.html"));
-  });
-
-  app.get("/admin-data.html", requireAdminAuth, (_req, res) => {
-    res.sendFile(path.join(__dirname, "admin-data.html"));
-  });
-
-  app.use(express.static(__dirname));
+  app.use("/static", express.static(FRONTEND_ASSETS_DIR));
+  app.use("/assets", express.static(path.join(ROOT_DIR, "assets")));
 
   return app;
 }

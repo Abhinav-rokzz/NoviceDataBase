@@ -1,7 +1,7 @@
 node_modules/
-novicehall.db
-novicehall.db-shm
-novicehall.db-wal
+data/novicehall.db
+data/novicehall.db-shm
+data/novicehall.db-wal
 .env
 .env.local
 .env.*.local

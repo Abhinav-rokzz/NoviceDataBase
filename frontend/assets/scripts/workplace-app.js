@@ -4,6 +4,7 @@
   const apiBase = "/api/workplaces";
   const reviewApiBase = "/api/reviews";
   const adminReviewApiBase = "/api/admin/reviews";
+  const adminWorkplaceApiBase = "/api/admin/workplaces";
   const adminLoginApiBase = "/api/admin/login";
   const adminLogoutApiBase = "/api/admin/logout";
 
@@ -507,11 +508,143 @@
     await loadLedger();
   };
 
+  const renderAdminWorkplacesPage = async () => {
+    const form = document.querySelector("[data-workplace-form]");
+    const body = document.querySelector("[data-workplace-body]");
+    const status = document.querySelector("[data-workplace-status]");
+    const resetButton = document.querySelector("[data-workplace-reset]");
+    const exportButton = document.querySelector("[data-workplace-export]");
+    if (!form || !body || !status || !resetButton || !exportButton) return;
+
+    let currentRows = [];
+
+    const resetForm = () => {
+      form.reset();
+      form.elements.id.value = "";
+      status.textContent = "";
+      status.className = "form-status";
+    };
+
+    const loadWorkplaces = async () => {
+      try {
+        const data = await fetchJson(adminWorkplaceApiBase);
+        const workplaces = data.workplaces || [];
+        currentRows = workplaces;
+
+        if (!workplaces.length) {
+          body.innerHTML = '<tr><td colspan="7" class="ledger-empty">No workplaces yet.</td></tr>';
+          return;
+        }
+
+        body.innerHTML = workplaces
+          .map(
+            (workplace) => `
+              <tr>
+                <td>${escapeHtml(workplace.name)}</td>
+                <td>${escapeHtml(workplace.slug)}</td>
+                <td>${escapeHtml(workplace.industry)}</td>
+                <td>${escapeHtml(workplace.location)}</td>
+                <td>${workplace.score} (${escapeHtml(workplace.band)})</td>
+                <td>${workplace.verifiedReviews}</td>
+                <td>
+                  <div class="ledger-actions">
+                    <button class="btn btn-soft" type="button" data-edit-workplace data-id="${workplace.id}">Edit</button>
+                    <a class="btn btn-soft" href="company.html?slug=${encodeURIComponent(workplace.slug)}">Open</a>
+                  </div>
+                </td>
+              </tr>
+            `
+          )
+          .join("");
+      } catch (error) {
+        if (error.message === "Unauthorized") {
+          window.location.href = "admin-login.html";
+          return;
+        }
+        body.innerHTML = '<tr><td colspan="7" class="ledger-empty">Could not load workplaces.</td></tr>';
+      }
+    };
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      status.textContent = "";
+      status.className = "form-status";
+
+      const payload = Object.fromEntries(new FormData(form).entries());
+      const id = payload.id;
+      delete payload.id;
+
+      try {
+        await fetchJson(id ? `${adminWorkplaceApiBase}/${encodeURIComponent(id)}` : adminWorkplaceApiBase, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        status.textContent = id ? "Workplace metadata updated." : "Workplace created.";
+        status.className = "form-status is-success";
+        resetForm();
+        await loadWorkplaces();
+      } catch (error) {
+        if (error.message === "Unauthorized") {
+          window.location.href = "admin-login.html";
+          return;
+        }
+        status.textContent = error.message;
+        status.className = "form-status is-error";
+      }
+    });
+
+    body.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-edit-workplace]");
+      if (!button) return;
+      const id = Number(button.getAttribute("data-id"));
+      const workplace = currentRows.find((item) => item.id === id);
+      if (!workplace) return;
+
+      form.elements.id.value = workplace.id;
+      form.elements.name.value = workplace.name;
+      form.elements.slug.value = workplace.slug;
+      form.elements.industry.value = workplace.industry;
+      form.elements.location.value = workplace.location;
+      form.elements.tagline.value = workplace.tagline;
+      form.elements.summary.value = workplace.summary;
+      status.textContent = `Editing ${workplace.name}.`;
+      status.className = "form-status is-warning";
+      window.scrollTo({ top: form.getBoundingClientRect().top + window.scrollY - 100, behavior: "smooth" });
+    });
+
+    resetButton.addEventListener("click", resetForm);
+
+    exportButton.addEventListener("click", () => {
+      const rows = [
+        ["id", "name", "slug", "industry", "location", "tagline", "summary", "score", "band", "verified_reviews", "salary_reports", "beginner_signal"],
+        ...currentRows.map((workplace) => [
+          workplace.id,
+          workplace.name,
+          workplace.slug,
+          workplace.industry,
+          workplace.location,
+          workplace.tagline,
+          workplace.summary,
+          workplace.score,
+          workplace.band,
+          workplace.verifiedReviews,
+          workplace.salaryReports,
+          workplace.beginnerSignal
+        ])
+      ];
+      downloadCsv(rows, "novicehall-workplaces.csv");
+    });
+
+    await loadWorkplaces();
+  };
+
   if (path.endsWith("workplace-score.html")) renderHomeCards();
   if (path.endsWith("companies.html")) renderCompaniesPage();
   if (path.endsWith("company.html")) renderCompanyPage();
   if (path.endsWith("review-workplace.html")) renderReviewPage();
   if (path.endsWith("admin.html")) renderAdminPage();
   if (path.endsWith("admin-data.html")) renderAdminLedgerPage();
+  if (path.endsWith("admin-workplaces.html")) renderAdminWorkplacesPage();
   if (path.endsWith("admin-login.html")) renderAdminLoginPage();
 })();

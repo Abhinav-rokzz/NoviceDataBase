@@ -58,16 +58,26 @@ The important architectural direction is that all workplace pages use the same U
 - Backend: Node.js + Express
 - Database: SQLite with `better-sqlite3`
 
-## Project Files
+## Repo Structure
 
-- [`index.html`](./index.html): original NoviceHall welcome page
-- [`workplace-score.html`](./workplace-score.html): workplace-score entry page
-- [`companies.html`](./companies.html): workplace listing page
-- [`company.html`](./company.html): shared workplace detail template
-- [`framework.css`](./framework.css): shared visual system and responsive styling
-- [`script.js`](./script.js): shared UI behavior and motion
-- [`workplace-app.js`](./workplace-app.js): frontend rendering from API responses
-- [`server.js`](./server.js): Express server, database initialization, and API routes
+- `frontend/pages/`: browser pages
+- `frontend/assets/styles/`: shared CSS
+- `frontend/assets/scripts/`: browser JavaScript
+- `backend/`: server and config loading
+- `data/`: SQLite database files
+- `assets/screenshots/`: README screenshots
+
+## Key Files
+
+- [`frontend/pages/index.html`](./frontend/pages/index.html): original NoviceHall welcome page
+- [`frontend/pages/workplace-score.html`](./frontend/pages/workplace-score.html): workplace-score entry page
+- [`frontend/pages/companies.html`](./frontend/pages/companies.html): workplace listing page
+- [`frontend/pages/company.html`](./frontend/pages/company.html): shared workplace detail template
+- [`frontend/assets/styles/framework.css`](./frontend/assets/styles/framework.css): shared visual system and responsive styling
+- [`frontend/assets/scripts/script.js`](./frontend/assets/scripts/script.js): shared UI behavior and motion
+- [`frontend/assets/scripts/workplace-app.js`](./frontend/assets/scripts/workplace-app.js): frontend rendering from API responses
+- [`backend/server.js`](./backend/server.js): Express server, routing, database logic, and API routes
+- [`backend/config.js`](./backend/config.js): local env loading
 - [`.env.example`](./.env.example): example local secret config
 
 ## Preview Pages
@@ -126,7 +136,7 @@ $env:ADMIN_PASSWORD="choose-a-strong-password"
 Then start the server:
 
 ```powershell
-node server.js
+npm.cmd start
 ```
 
 You should see:
