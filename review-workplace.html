@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoviceHall Workplace Score | Review a Workplace</title>
+  <meta
+    name="description"
+    content="Share an anonymous workplace review for NoviceHall Workplace Score. Reviews stay anonymous publicly and are reviewed before they affect a score."
+  >
+  <link rel="stylesheet" href="framework.css">
+</head>
+<body class="score-page">
+  <div class="site-bg" aria-hidden="true"></div>
+
+  <header class="topbar" id="top">
+    <div class="container topbar-inner">
+      <a href="workplace-score.html" class="brand">NoviceHall Workplace Score</a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="workplace-score.html">Home</a>
+        <a href="companies.html">Browse</a>
+        <a href="#review-form">Review</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.2 14.2A8.8 8.8 0 1 1 9.8 3.8a7.2 7.2 0 1 0 10.4 10.4z"></path>
+        </svg>
+        <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"></circle>
+          <path d="M12 2.7v2.4M12 18.9v2.4M4.7 12h2.4M16.9 12h2.4M5.9 5.9l1.7 1.7M16.4 16.4l1.7 1.7M18.1 5.9l-1.7 1.7M7.6 16.4l-1.7 1.7"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="score-hero container reveal in-view">
+      <div class="score-hero-grid">
+        <div class="score-hero-copy">
+          <p class="eyebrow">Anonymous Publicly</p>
+          <h1>Share what a workplace felt like from the inside.</h1>
+          <p class="hero-copy">
+            Your review helps the next beginner ask sharper questions before they accept an offer.
+            Public posts stay anonymous. NoviceHall reviews submissions before they count toward a score.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#review-form">Start your review</a>
+            <a class="btn btn-soft" href="companies.html">Browse workplaces</a>
+          </div>
+        </div>
+        <aside class="search-preview alive-item">
+          <p class="mini-caption">What happens next</p>
+          <div class="stack-list">
+            <span class="tag">1. You submit your review</span>
+            <span class="tag">2. It stays pending</span>
+            <span class="tag">3. NoviceHall reviews it</span>
+            <span class="tag">4. Only approved reviews affect scores</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section container reveal" id="review-form">
+      <div class="section-head">
+        <h2>Review your workplace</h2>
+        <p>Focus on what beginners would want to know: how people were treated, what was promised, and what daily life actually felt like.</p>
+      </div>
+      <form class="review-form" data-review-form novalidate>
+        <div class="form-grid">
+          <label class="field">
+            <span>Choose a listed workplace</span>
+            <select name="workplaceSlug" data-workplace-select>
+              <option value="">Select a workplace</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Or enter workplace name</span>
+            <input type="text" name="workplaceName" placeholder="Company, shop, warehouse, office">
+          </label>
+          <label class="field">
+            <span>Your role</span>
+            <input type="text" name="reviewerRole" required placeholder="Apprentice electrician, warehouse associate">
+          </label>
+          <label class="field">
+            <span>Location</span>
+            <input type="text" name="reviewerLocation" required placeholder="City, State">
+          </label>
+          <label class="field">
+            <span>Employment type</span>
+            <select name="employmentType" required>
+              <option value="">Choose one</option>
+              <option value="full-time">Full-time</option>
+              <option value="part-time">Part-time</option>
+              <option value="contract">Contract</option>
+              <option value="internship">Internship</option>
+              <option value="apprenticeship">Apprenticeship</option>
+              <option value="former-employee">Former employee</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Salary amount (optional)</span>
+            <input type="number" name="salaryAmount" min="0" step="1" placeholder="42000">
+          </label>
+          <label class="field">
+            <span>Salary period (optional)</span>
+            <select name="salaryPeriod">
+              <option value="">Choose one</option>
+              <option value="yearly">Per year</option>
+              <option value="monthly">Per month</option>
+              <option value="hourly">Per hour</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="ratings-panel">
+          <h3>Rate the workplace</h3>
+          <div class="ratings-grid">
+            <label class="field">
+              <span>Pay fairness</span>
+              <select name="payRating" required>
+                <option value="">1 to 5</option>
+                <option value="1">1 - Very poor</option>
+                <option value="2">2 - Weak</option>
+                <option value="3">3 - Mixed</option>
+                <option value="4">4 - Good</option>
+                <option value="5">5 - Strong</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Management treatment</span>
+              <select name="managementRating" required>
+                <option value="">1 to 5</option>
+                <option value="1">1 - Very poor</option>
+                <option value="2">2 - Weak</option>
+                <option value="3">3 - Mixed</option>
+                <option value="4">4 - Good</option>
+                <option value="5">5 - Strong</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Workplace environment</span>
+              <select name="environmentRating" required>
+                <option value="">1 to 5</option>
+                <option value="1">1 - Very poor</option>
+                <option value="2">2 - Weak</option>
+                <option value="3">3 - Mixed</option>
+                <option value="4">4 - Good</option>
+                <option value="5">5 - Strong</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Growth for beginners</span>
+              <select name="growthRating" required>
+                <option value="">1 to 5</option>
+                <option value="1">1 - Very poor</option>
+                <option value="2">2 - Weak</option>
+                <option value="3">3 - Mixed</option>
+                <option value="4">4 - Good</option>
+                <option value="5">5 - Strong</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Reliability</span>
+              <select name="reliabilityRating" required>
+                <option value="">1 to 5</option>
+                <option value="1">1 - Very poor</option>
+                <option value="2">2 - Weak</option>
+                <option value="3">3 - Mixed</option>
+                <option value="4">4 - Good</option>
+                <option value="5">5 - Strong</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-grid form-grid-wide">
+          <label class="field field-wide">
+            <span>Review title</span>
+            <input type="text" name="reviewTitle" required maxlength="120" placeholder="Supportive team, but advancement was slow">
+          </label>
+          <label class="field field-wide">
+            <span>Your review</span>
+            <textarea name="reviewBody" required rows="7" maxlength="4000" placeholder="What was promised? What felt fair or unfair? Would you tell a beginner to be careful about anything?"></textarea>
+          </label>
+        </div>
+
+        <div class="form-note">
+          <p>Submitted reviews are stored as pending first. They are not published immediately and do not change a workplace score until reviewed.</p>
+        </div>
+
+        <div class="cta-actions">
+          <button class="btn btn-primary" type="submit">Submit review</button>
+          <a class="btn btn-soft" href="workplace-score.html">Back to Workplace Score</a>
+        </div>
+
+        <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>NoviceHall reviews submissions before they affect public scores.</p>
+      <a href="#top" class="btn btn-soft">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+  <script src="workplace-app.js" defer></script>
+</body>
+</html>

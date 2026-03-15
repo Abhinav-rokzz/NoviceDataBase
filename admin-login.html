@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoviceHall Workplace Score | Admin Login</title>
+  <meta
+    name="description"
+    content="Private admin login for the NoviceHall Workplace Score review queue."
+  >
+  <link rel="stylesheet" href="framework.css">
+</head>
+<body class="score-page">
+  <div class="site-bg" aria-hidden="true"></div>
+
+  <main class="login-shell">
+    <section class="login-card reveal in-view">
+      <p class="eyebrow">Private Admin Access</p>
+      <h1>Sign in to the moderation queue.</h1>
+      <p class="hero-copy">
+        This page is only for the person running NoviceHall Workplace Score moderation.
+        Set your own <code>ADMIN_PASSWORD</code> before starting the server.
+      </p>
+      <form class="login-form" data-admin-login-form novalidate>
+        <label class="field">
+          <span>Admin password</span>
+          <input type="password" name="password" required placeholder="Enter your admin password">
+        </label>
+        <div class="cta-actions">
+          <button class="btn btn-primary" type="submit">Enter admin queue</button>
+          <a class="btn btn-soft" href="workplace-score.html">Back to site</a>
+        </div>
+        <p class="form-status" data-admin-login-status role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="script.js" defer></script>
+  <script src="workplace-app.js" defer></script>
+</body>
+</html>

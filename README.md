@@ -68,6 +68,7 @@ The important architectural direction is that all workplace pages use the same U
 - [`script.js`](./script.js): shared UI behavior and motion
 - [`workplace-app.js`](./workplace-app.js): frontend rendering from API responses
 - [`server.js`](./server.js): Express server, database initialization, and API routes
+- [`.env.example`](./.env.example): example local secret config
 
 ## Preview Pages
 
@@ -104,6 +105,26 @@ npm.cmd install
 
 ### 2. Start the server
 
+Create a local env file first so the moderation portal stays private without committing secrets:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Then edit `.env.local` and set your real admin password:
+
+```text
+ADMIN_PASSWORD=your-own-strong-password
+```
+
+If you prefer, you can still set it directly in the shell instead:
+
+```powershell
+$env:ADMIN_PASSWORD="choose-a-strong-password"
+```
+
+Then start the server:
+
 ```powershell
 node server.js
 ```
@@ -119,6 +140,7 @@ NoviceHall server listening on http://localhost:3000
 - [http://localhost:3000/](http://localhost:3000/)
 - [http://localhost:3000/workplace-score.html](http://localhost:3000/workplace-score.html)
 - [http://localhost:3000/companies.html](http://localhost:3000/companies.html)
+- [http://localhost:3000/admin-login.html](http://localhost:3000/admin-login.html)
 
 ## API
 

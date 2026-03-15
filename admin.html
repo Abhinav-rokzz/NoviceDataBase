@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoviceHall Workplace Score | Review Queue</title>
+  <meta
+    name="description"
+    content="Internal review queue for pending workplace submissions in NoviceHall Workplace Score."
+  >
+  <link rel="stylesheet" href="framework.css">
+</head>
+<body class="score-page">
+  <div class="site-bg" aria-hidden="true"></div>
+
+  <header class="topbar" id="top">
+    <div class="container topbar-inner">
+      <a href="workplace-score.html" class="brand">NoviceHall Review Queue</a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="workplace-score.html">Home</a>
+        <a href="review-workplace.html">Review Form</a>
+        <a href="#queue">Queue</a>
+        <a href="admin-data.html">Ledger</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.2 14.2A8.8 8.8 0 1 1 9.8 3.8a7.2 7.2 0 1 0 10.4 10.4z"></path>
+        </svg>
+        <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"></circle>
+          <path d="M12 2.7v2.4M12 18.9v2.4M4.7 12h2.4M16.9 12h2.4M5.9 5.9l1.7 1.7M16.4 16.4l1.7 1.7M18.1 5.9l-1.7 1.7M7.6 16.4l-1.7 1.7"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="score-hero container reveal in-view">
+      <div class="score-hero-grid">
+        <div class="score-hero-copy">
+          <p class="eyebrow">Internal Moderation</p>
+          <h1>Review pending workplace submissions before they go public.</h1>
+          <p class="hero-copy">
+            This queue is the first moderation pass. Approving a submission publishes a snippet to the workplace page
+            and folds its ratings into the workplace's visible signals.
+          </p>
+        </div>
+        <aside class="search-preview alive-item">
+          <p class="mini-caption">Current flow</p>
+          <div class="stack-list">
+            <span class="tag">Submission enters pending queue</span>
+            <span class="tag">Admin approves or rejects</span>
+            <span class="tag">Approved reviews affect the workplace page</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section container reveal" id="queue">
+      <div class="section-head">
+        <h2>Pending reviews</h2>
+        <p>Keep this simple for now: read the context, then approve or reject.</p>
+      </div>
+      <div class="queue-status" data-admin-status role="status" aria-live="polite"></div>
+      <div class="admin-grid" data-admin-queue></div>
+      <div class="cta-actions">
+        <button class="btn btn-soft" type="button" data-admin-logout>Log out</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>Approved reviews immediately start shaping the shared workplace pages.</p>
+      <a href="#top" class="btn btn-soft">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+  <script src="workplace-app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoviceHall Workplace Score | Review Ledger</title>
+  <meta
+    name="description"
+    content="Protected review ledger for NoviceHall Workplace Score."
+  >
+  <link rel="stylesheet" href="framework.css">
+</head>
+<body class="score-page">
+  <div class="site-bg" aria-hidden="true"></div>
+
+  <header class="topbar" id="top">
+    <div class="container topbar-inner">
+      <a href="workplace-score.html" class="brand">NoviceHall Review Ledger</a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="admin.html">Queue</a>
+        <a href="#ledger">Ledger</a>
+        <a href="review-workplace.html">Review Form</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.2 14.2A8.8 8.8 0 1 1 9.8 3.8a7.2 7.2 0 1 0 10.4 10.4z"></path>
+        </svg>
+        <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"></circle>
+          <path d="M12 2.7v2.4M12 18.9v2.4M4.7 12h2.4M16.9 12h2.4M5.9 5.9l1.7 1.7M16.4 16.4l1.7 1.7M18.1 5.9l-1.7 1.7M7.6 16.4l-1.7 1.7"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="score-hero container reveal in-view">
+      <div class="score-hero-grid">
+        <div class="score-hero-copy">
+          <p class="eyebrow">Immutable Review Ledger</p>
+          <h1>See submissions in a spreadsheet-style table without editing their text.</h1>
+          <p class="hero-copy">
+            Approved, rejected, pending, and removed reviews all stay visible in the ledger.
+            You can remove a published review from public view, but there is still no edit path for the submitted content itself.
+          </p>
+        </div>
+        <aside class="search-preview alive-item">
+          <p class="mini-caption">Trust rule</p>
+          <div class="stack-list">
+            <span class="tag">Approve</span>
+            <span class="tag">Reject</span>
+            <span class="tag">Remove from public view</span>
+            <span class="tag">No text editing</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section container reveal" id="ledger">
+      <div class="section-head">
+        <h2>Review ledger</h2>
+        <p>Filter by status, export the table, and remove published reviews if they later look untrustworthy.</p>
+      </div>
+      <div class="toolbar-row">
+        <label class="field">
+          <span>Status filter</span>
+          <select data-ledger-filter>
+            <option value="all">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="published">Published</option>
+            <option value="rejected">Rejected</option>
+            <option value="removed">Removed</option>
+          </select>
+        </label>
+        <div class="cta-actions">
+          <button class="btn btn-primary" type="button" data-export-ledger>Export CSV</button>
+          <button class="btn btn-soft" type="button" data-admin-logout>Log out</button>
+        </div>
+      </div>
+      <div class="queue-status" data-ledger-status role="status" aria-live="polite"></div>
+      <div class="ledger-wrap">
+        <table class="ledger-table" data-ledger-table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Workplace</th>
+              <th>Role</th>
+              <th>Location</th>
+              <th>Ratings</th>
+              <th>Title</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody data-ledger-body></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>The ledger keeps original submissions visible internally even after removal from public view.</p>
+      <a href="#top" class="btn btn-soft">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+  <script src="workplace-app.js" defer></script>
+</body>
+</html>
