@@ -1,0 +1,4 @@
+node_modules/
+novicehall.db
+novicehall.db-shm
+novicehall.db-wal

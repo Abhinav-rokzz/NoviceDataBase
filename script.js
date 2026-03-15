@@ -7,7 +7,7 @@
   const toggle = document.querySelector(".menu-toggle");
   const navLinks = document.querySelectorAll(".nav a");
   const revealItems = document.querySelectorAll(".reveal");
-  const aliveItems = document.querySelectorAll(".card, .hero-band article, .panel, .section-head");
+  const aliveItems = document.querySelectorAll(".card, .hero-band article, .panel, .section-head, .alive-item");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const themeStorageKey = "nh-theme-override";
 

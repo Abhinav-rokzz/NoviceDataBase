@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NoviceHall Workplace Score | Browse Workplaces</title>
+  <meta
+    name="description"
+    content="Browse workplaces in NoviceHall Workplace Score and compare beginner-friendly signals like pay fairness, management treatment, and workplace environment."
+  >
+  <link rel="stylesheet" href="framework.css">
+</head>
+<body class="score-page">
+  <div class="site-bg" aria-hidden="true"></div>
+
+  <header class="topbar" id="top">
+    <div class="container topbar-inner">
+      <a href="workplace-score.html" class="brand">NoviceHall Workplace Score</a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="workplace-score.html">Home</a>
+        <a href="#browse">Browse</a>
+        <a href="workplace-score.html#trust">Trust</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" title="Switch to dark theme">
+        <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20.2 14.2A8.8 8.8 0 1 1 9.8 3.8a7.2 7.2 0 1 0 10.4 10.4z"></path>
+        </svg>
+        <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.1"></circle>
+          <path d="M12 2.7v2.4M12 18.9v2.4M4.7 12h2.4M16.9 12h2.4M5.9 5.9l1.7 1.7M16.4 16.4l1.7 1.7M18.1 5.9l-1.7 1.7M7.6 16.4l-1.7 1.7"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="score-hero container reveal in-view">
+      <div class="score-hero-copy">
+        <p class="eyebrow">Browse workplaces</p>
+        <h1>Compare teams, not just job titles.</h1>
+        <p class="hero-copy">
+          This page uses one shared card layout for every workplace record. As the backend grows, the list will keep
+          reshaping itself from real company data instead of handcrafted entries.
+        </p>
+      </div>
+    </section>
+
+    <section class="section container reveal in-view" id="browse">
+      <div class="section-head">
+        <h2>Workplace cards</h2>
+        <p>Each card comes from the same backend data source that powers the detail page.</p>
+      </div>
+      <div class="grid cards-3" data-companies-grid></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>NoviceHall Workplace Score is shaping itself around real workplace data.</p>
+      <a href="#top" class="btn btn-soft">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+  <script src="workplace-app.js" defer></script>
+</body>
+</html>
