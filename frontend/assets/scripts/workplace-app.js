@@ -47,7 +47,7 @@
         <span class="signal">${workplace.salaryReports} salary reports</span>
         <span class="signal">${escapeHtml(workplace.beginnerSignal)}</span>
       </div>
-      <a class="btn btn-soft" href="company.html?slug=${encodeURIComponent(workplace.slug)}">Open workplace</a>
+      <a class="btn btn-soft" href="/company.html?slug=${encodeURIComponent(workplace.slug)}">Open workplace</a>
     </article>
   `;
 
@@ -133,8 +133,8 @@
               <h1>${escapeHtml(workplace.name)}</h1>
               <p class="hero-copy">${escapeHtml(workplace.summary)}</p>
               <div class="hero-actions">
-                <a class="btn btn-primary" href="companies.html">Browse more workplaces</a>
-                <a class="btn btn-soft" href="review-workplace.html?slug=${encodeURIComponent(workplace.slug)}">Review this workplace</a>
+                <a class="btn btn-primary" href="/companies.html">Browse more workplaces</a>
+                <a class="btn btn-soft" href="/review-workplace.html?slug=${encodeURIComponent(workplace.slug)}">Review this workplace</a>
               </div>
             </div>
             <aside class="search-preview">
@@ -301,7 +301,7 @@
           .join("");
       } catch (error) {
         if (error.message === "Unauthorized") {
-          window.location.href = "admin-login.html";
+          window.location.href = "/admin-login.html";
           return;
         }
         mount.innerHTML = emptyStateMarkup("Could not load moderation queue", "Start the backend server to use the review queue.");
@@ -314,7 +314,7 @@
           await fetchJson(adminLogoutApiBase, { method: "POST" });
         } catch (_error) {
         } finally {
-          window.location.href = "admin-login.html";
+          window.location.href = "/admin-login.html";
         }
       });
     }
@@ -344,7 +344,7 @@
         await loadQueue();
       } catch (error) {
         if (error.message === "Unauthorized") {
-          window.location.href = "admin-login.html";
+          window.location.href = "/admin-login.html";
           return;
         }
         button.disabled = false;
@@ -377,7 +377,7 @@
         });
         status.textContent = "Login successful. Redirecting...";
         status.className = "form-status is-success";
-        window.location.href = "admin.html";
+        window.location.href = "/admin.html";
       } catch (error) {
         status.textContent = error.message;
         status.className = "form-status is-error";
@@ -426,7 +426,7 @@
                 <td>
                   <div class="ledger-actions">
                     ${submission.publicStatus === "published" ? `<button class="btn btn-soft" type="button" data-remove-review data-id="${submission.id}">Remove</button>` : ""}
-                    ${submission.workplaceSlug ? `<a class="btn btn-soft" href="company.html?slug=${encodeURIComponent(submission.workplaceSlug)}">Open</a>` : ""}
+                    ${submission.workplaceSlug ? `<a class="btn btn-soft" href="/company.html?slug=${encodeURIComponent(submission.workplaceSlug)}">Open</a>` : ""}
                   </div>
                 </td>
               </tr>
@@ -435,7 +435,7 @@
           .join("");
       } catch (error) {
         if (error.message === "Unauthorized") {
-          window.location.href = "admin-login.html";
+          window.location.href = "/admin-login.html";
           return;
         }
         body.innerHTML = '<tr><td colspan="8" class="ledger-empty">Could not load the review ledger.</td></tr>';
@@ -474,7 +474,7 @@
           await fetchJson(adminLogoutApiBase, { method: "POST" });
         } catch (_error) {
         } finally {
-          window.location.href = "admin-login.html";
+          window.location.href = "/admin-login.html";
         }
       });
     }
@@ -496,7 +496,7 @@
         await loadLedger();
       } catch (error) {
         if (error.message === "Unauthorized") {
-          window.location.href = "admin-login.html";
+          window.location.href = "/admin-login.html";
           return;
         }
         button.disabled = false;
@@ -549,7 +549,7 @@
                 <td>
                   <div class="ledger-actions">
                     <button class="btn btn-soft" type="button" data-edit-workplace data-id="${workplace.id}">Edit</button>
-                    <a class="btn btn-soft" href="company.html?slug=${encodeURIComponent(workplace.slug)}">Open</a>
+                    <a class="btn btn-soft" href="/company.html?slug=${encodeURIComponent(workplace.slug)}">Open</a>
                   </div>
                 </td>
               </tr>
@@ -558,7 +558,7 @@
           .join("");
       } catch (error) {
         if (error.message === "Unauthorized") {
-          window.location.href = "admin-login.html";
+          window.location.href = "/admin-login.html";
           return;
         }
         body.innerHTML = '<tr><td colspan="7" class="ledger-empty">Could not load workplaces.</td></tr>';
@@ -586,7 +586,7 @@
         await loadWorkplaces();
       } catch (error) {
         if (error.message === "Unauthorized") {
-          window.location.href = "admin-login.html";
+          window.location.href = "/admin-login.html";
           return;
         }
         status.textContent = error.message;
